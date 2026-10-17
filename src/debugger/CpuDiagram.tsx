@@ -16,10 +16,10 @@ const blocks = [
 
 export function CpuDiagram({ state, language, selected, onSelect }: { state: CpuState; language: Language; selected: string; onSelect: (id: string) => void }) {
   const values: Record<string, string> = {
-    pc: `${hex(state.pc)} → ${hex(state.nextPc)}`, rom: hex(state.instruction, 4), decoder: `${hex(state.opcode)} | ${hex(state.operand)}`,
+    pc: `${hex(state.pc)} · ${state.control.pcWrite ? `→ ${hex(state.nextPc)}` : language === 'tr' ? 'TUT' : 'HOLD'}`, rom: hex(state.instruction, 4), decoder: `${hex(state.opcode)} | ${hex(state.operand)}`,
     registers: `A ${hex(state.a)} · Z${state.z} C${state.c}`, alu: `${hex(state.aluResult)} · C${state.aluCarry}`,
     control: state.fault ? 'FAULT' : state.halted ? 'HALT' : `ALU ${state.control.aluOp} · ${state.control.branch ? 'BRANCH' : 'PC + 1'}`,
-    io: `${hex(state.input)} → ${hex(state.output)}`, ram: `[${hex(state.operand)}] = ${hex(state.ram[state.operand] ?? 0)}`, flags: `Z ${state.aluResult === 0 ? 1 : 0} · C ${state.aluCarry}`,
+    io: `${hex(state.input)} → ${hex(state.output)}`, ram: `[${hex(state.operand)}] = ${hex(state.ram[state.operand] ?? 0)}`, flags: `zero ${state.aluResult === 0 ? 1 : 0} · carry ${state.aluCarry}`,
   };
   const active: Record<string, boolean> = {
     pc: !!state.control.pcWrite, rom: !!state.control.active, decoder: !!state.control.active,
@@ -38,7 +38,7 @@ export function CpuDiagram({ state, language, selected, onSelect }: { state: Cpu
     { id: 'alu-flags', d: 'M467 266H495V394H522', on: !!state.control.zWrite || !!state.control.cWrite, label: 'Z / C', x: 473, y: 335 },
     { id: 'reg-ram', d: 'M222 267H249V394H277', on: !!state.control.ramWrite, label: 'STORE', x: 226, y: 332 },
   ];
-  return <svg className="cpu-diagram" viewBox="0 0 746 458" role="img" aria-label={language === 'tr' ? 'Gerçek CPU veri ve kontrol yolları' : 'Real CPU datapath and control signals'}>
+  return <svg className="cpu-diagram" viewBox="0 0 746 458" role="group" aria-label={language === 'tr' ? 'Gerçek CPU veri ve kontrol yolları' : 'Real CPU datapath and control signals'}>
     <defs><pattern id="cpu-grid" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#26384e" /></pattern></defs>
     <rect width="746" height="458" fill="url(#cpu-grid)" />
     {paths.map((path) => <g key={path.id} className={path.on ? 'datapath is-active' : 'datapath'}><path d={path.d} /><text x={path.x} y={path.y} textAnchor="middle">{path.label}</text></g>)}
