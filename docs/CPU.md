@@ -82,7 +82,7 @@ The carry candidate becomes architectural C only when `cWrite` is one. Consequen
 
 ### Control signals
 
-The simulator exposes `active`, `aWrite`, `zWrite`, `cWrite`, `ramWrite`, `outWrite`, `pcWrite`, `branch`, `haltWrite`, `faultWrite` and `aluOp` on the `control` component. Every write enable is gated by processor activity and opcode validity.
+The simulator exposes `active`, `aWrite`, `zWrite`, `cWrite`, `ramWrite`, `outWrite`, `pcWrite`, `branch`, `haltWrite`, `faultWrite` and `aluOp` on the `control` component. Data-write enables require an active processor and a valid opcode; the halt and fault latches also respond to invalid-opcode detection.
 
 `zWrite` follows `aWrite`. `cWrite` is enabled only for ADD, SUB, SHL and SHR. `branch` is the actual taken-branch signal, not merely an indication that the current mnemonic is a jump. `active` becomes zero after HALT or FAULT is latched.
 

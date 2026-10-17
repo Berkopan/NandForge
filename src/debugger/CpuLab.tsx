@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { ArrowLeft, ArrowLeftToLine, ArrowRightToLine, BookOpen, Braces, CheckCircle2, ChevronDown, Circle, Cpu, Download, Play, Pause, Plus, RotateCcw, SkipForward, Terminal, X } from 'lucide-react';
 import { assemble, EXAMPLE_PROGRAMS, type AssemblyResult } from '../assembler';
-import { ALU_OPERATIONS, CPU_SUBSYSTEMS, INSTRUCTIONS_BY_OPCODE, disassemble } from '../cpu';
+import { CPU_SUBSYSTEMS, disassemble } from '../cpu';
 import { getComponentSpec } from '../core';
 import { CircuitEditor } from '../editor/CircuitEditor';
 import { WaveformPanel } from '../editor/WaveformPanel';
 import { probeId, type SignalProbe } from '../editor/waveforms';
 import { t, type Language } from '../i18n';
+import { aluOperationName, cpuText, instructionDescription } from '../i18n/cpu';
 import { downloadText } from '../persistence/projects';
 import { DebuggerSession } from './session';
 import { AssemblyEditor } from './AssemblyEditor';
@@ -153,11 +154,11 @@ export function CpuLab({ source, onSourceChange, language, onNotify, onVerified 
       </main>
       <aside className="cpu-register-pane">
         <header className="pane-header"><span>{t(language, 'registers')}</span><small>8-bit</small></header>
-        <div className={`accumulator ${previousState && previousState.a !== state.a ? 'changed' : ''}`}><span>ACCUMULATOR <b>A</b></span><strong data-testid="cpu-a">{state.a}<small>0x{hex(state.a)}</small></strong><div className="binary-bits">{state.a.toString(2).padStart(8, '0').split('').map((bit, i) => <i key={i} className={bit === '1' ? 'bit-on' : ''}>{bit}</i>)}</div></div>
-        <div className="flag-registers"><div className={state.z ? 'active' : ''}><span>ZERO</span><b>Z</b><strong data-testid="cpu-z">{state.z}</strong></div><div className={state.c ? 'active' : ''}><span>CARRY</span><b>C</b><strong data-testid="cpu-c">{state.c}</strong></div></div>
+        <div className={`accumulator ${previousState && previousState.a !== state.a ? 'changed' : ''}`}><span>{cpuText(language, 'accumulator')} <b>A</b></span><strong data-testid="cpu-a">{state.a}<small>0x{hex(state.a)}</small></strong><div className="binary-bits">{state.a.toString(2).padStart(8, '0').split('').map((bit, i) => <i key={i} className={bit === '1' ? 'bit-on' : ''}>{bit}</i>)}</div></div>
+        <div className="flag-registers"><div className={state.z ? 'active' : ''}><span>{cpuText(language, 'zero')}</span><b>Z</b><strong data-testid="cpu-z">{state.z}</strong></div><div className={state.c ? 'active' : ''}><span>{cpuText(language, 'carry')}</span><b>C</b><strong data-testid="cpu-c">{state.c}</strong></div></div>
         <div className="output-register"><span>{t(language, 'output')} <code>OUT</code></span><strong data-testid="cpu-output">{state.output}</strong><small>0x{hex(state.output)} · {state.output.toString(2).padStart(8, '0')}</small></div>
         <label className="external-input"><span>{t(language, 'input')} <code>IN</code></span><input type="number" min={0} max={255} value={state.input} onChange={(event) => { const value = Number(event.target.value); if (!Number.isInteger(value) || value < 0 || value > 255) return; setRunning(false); session.setInput(value); refresh(); }} /><small>0–255 · 0x{hex(state.input)}</small></label>
-        <div className="operation-card"><h4>{t(language, 'operation')}</h4><p>{tr ? `Komut: ${disassemble(state.instruction)}. ALU seçimi ${state.control.aluOp}; aşağıdaki yazma etkinleştirmeleri sonraki kenarı belirler.` : INSTRUCTIONS_BY_OPCODE.get(state.opcode)?.description ?? 'Reserved opcode: the next edge latches a processor fault.'}</p><code>ALU · {ALU_OPERATIONS[state.aluOperation] ?? '—'}</code></div>
+        <div className="operation-card"><h4>{t(language, 'operation')}</h4><p>{instructionDescription(language, state.opcode)}</p><code>{cpuText(language, 'aluSelection')} · {aluOperationName(language, state.aluOperation)}</code></div>
         <div className="control-registers"><h4>{t(language, 'controls')}</h4>{Object.entries(state.control).filter(([key]) => key !== 'aluOp').map(([key, value]) => <span key={key} className={value ? 'enabled' : ''}><i />{key}<b>{value}</b></span>)}</div>
       </aside>
     </div>

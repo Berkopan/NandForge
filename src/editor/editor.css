@@ -1,5 +1,5 @@
-.nf-editor-root { height: 100%; min-height: 470px; display: flex; flex-direction: column; color: var(--text, #e5edf8); background: var(--bg, #080e18); font-family: inherit; }
-.nf-editor-layer { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.nf-editor-root { height: 100%; min-height: 470px; min-width: 0; overflow: hidden; display: flex; flex-direction: column; color: var(--text, #e5edf8); background: var(--bg, #080e18); font-family: inherit; }
+.nf-editor-layer { flex: 1; min-height: 0; min-width: 0; overflow: hidden; display: flex; flex-direction: column; }
 .nf-editor-layer[hidden] { display: none !important; }
 .nf-editor { display: flex; flex-direction: column; flex: 1; min-height: 0; position: relative; outline: none; isolation: isolate; font-size: 12px; }
 .nf-editor *, .nf-modal * { box-sizing: border-box; }
@@ -20,7 +20,7 @@
 .nf-button-small { padding: 7px 9px; font-size: 11px; }
 .nf-button-danger { color: #f7999e; background: rgba(226, 87, 99, .06); border-color: rgba(226, 87, 99, .19); }
 .nf-button-danger:hover:not(:disabled) { background: rgba(226, 87, 99, .12); border-color: #dd7079; }
-.nf-editor-toolbar { min-height: 51px; display: flex; gap: 5px; align-items: center; padding: 8px 13px; background: #101a2a; border-bottom: 1px solid var(--border, #25354c); z-index: 5; }
+.nf-editor-toolbar { min-height: 51px; flex-shrink: 0; display: flex; gap: 5px; align-items: center; padding: 8px 13px; background: #101a2a; border-bottom: 1px solid var(--border, #25354c); z-index: 5; }
 .nf-run-controls { display: flex; align-items: center; gap: 3px; }
 .nf-run-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 85px; height: 32px; padding: 0 13px; background: #42d4cd; border: 1px solid #42d4cd; border-radius: 6px; color: #082523; font-weight: 650 !important; }
 .nf-run-button:hover:not(:disabled) { background: #70e1dc; }
@@ -35,7 +35,7 @@
 .nf-tool-button:hover:not(:disabled), .nf-tool-button.is-active { background: #1b2b40; border-color: #2f425b; color: #f1f5fa; }
 .nf-editor-body { flex: 1; min-height: 0; display: flex; position: relative; overflow: hidden; }
 .nf-editor-center { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; }
-.nf-canvas { position: relative; flex: 1; min-height: 190px; background: #0a121f; }
+.nf-canvas { position: relative; flex: 1; min-height: 120px; background: #0a121f; }
 .nf-canvas .react-flow { --xy-background-color: #0a121f; --xy-edge-stroke-default: #54637b; --xy-attribution-background-color: #0c1624; --xy-node-border-radius: 9px; }
 .nf-canvas .react-flow__attribution { right: 6px; bottom: 4px; background: transparent; opacity: .55; font-size: 8px; }
 .nf-canvas .react-flow__attribution a { color: #8293ac; }
@@ -63,7 +63,7 @@
 .nf-palette-search input { width: 100%; border: 0; background: transparent; padding: 9px 0; font-size: 10px; }
 .nf-palette-search:focus-within { border-color: #3b878c; }
 .nf-palette-search input:focus-visible { outline: none; }
-.nf-palette-list { flex: 1; overflow: auto; scrollbar-width: thin; scrollbar-color: #30435d transparent; padding: 0 8px 15px; }
+.nf-palette-list { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; scrollbar-color: #30435d transparent; padding: 0 8px 15px; }
 .nf-palette-group { margin-bottom: 6px; }
 .nf-palette-category { width: 100%; display: flex; align-items: center; gap: 5px; padding: 10px 4px 8px; border: 0; background: transparent; color: #758aa6; text-transform: uppercase; font-size: 8px !important; font-weight: 650 !important; letter-spacing: .09em; text-align: left; }
 .nf-palette-category svg { transition: transform .15s; }
@@ -203,7 +203,7 @@
 .nf-dock-tabs .nf-icon-button { align-self: center; }
 .nf-selection-count { color: #6b83a3; font-size: 8px; align-self: center; white-space: nowrap; }
 .nf-editor-dock { flex: 0 0 235px; min-height: 150px; max-height: 42%; background: #0c1625; border-top: 1px solid #26374f; overflow: auto; scrollbar-width: thin; scrollbar-color: #30435d transparent; }
-.nf-editor-footer { min-height: 28px; display: flex; align-items: center; gap: 17px; padding: 0 15px; background: #0d1726; border-top: 1px solid #25354b; font-size: 8px; color: #6e87a8; flex-wrap: nowrap; white-space: nowrap; }
+.nf-editor-footer { min-height: 28px; flex-shrink: 0; display: flex; align-items: center; gap: 17px; padding: 0 15px; background: #0d1726; border-top: 1px solid #25354b; font-size: 8px; color: #6e87a8; flex-wrap: nowrap; white-space: nowrap; }
 .nf-editor-footer > span { display: inline-flex; align-items: center; gap: 4px; }
 .nf-editor-footer strong { color: #a4b7d2; font: 9px ui-monospace, SFMono-Regular, Menlo, monospace; }
 .nf-editor-footer .nf-footer-valid { color: #61998f; }
