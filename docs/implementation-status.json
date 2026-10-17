@@ -1,0 +1,742 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "name": "NandForge",
+    "repository": "Berkopan/NandForge",
+    "assetBase": "/NandForge/",
+    "intendedPublicUrl": "https://berkopan.github.io/NandForge/",
+    "publicUrl": "https://berkopan.github.io/NandForge/"
+  },
+  "provenance": {
+    "sourceKind": "user-supplied engineering brief",
+    "sourceFile": "Yapıştırılan metin(20261017-184928).txt",
+    "acceptanceSection": 17,
+    "originalBriefCommitted": false,
+    "explicitUserOverride": "Repository is Berkopan/NandForge; use the matching case-sensitive /NandForge/ asset base.",
+    "note": "The acceptance summaries paraphrase the brief. The private prompt is not reproduced."
+  },
+  "checkpoint": {
+    "dateUtc": "2026-10-17",
+    "state": "complete",
+    "releaseComplete": true,
+    "note": "All A–N acceptance scenarios are verified. Local and remote unit/browser gates, five production screenshot reviews, Pages publication and the exact public Home/Circuit Lab/CPU browser smoke check are complete.",
+    "codeHead": "fcb591e061d429e183aa68011d356b795eea5e07"
+  },
+  "verification": {
+    "unit": {
+      "status": "passed",
+      "command": "npm test",
+      "passed": 218,
+      "files": 17,
+      "reportedDurationSeconds": 1.72,
+      "scope": "final integrated unit suite",
+      "evidence": [
+        "tests/core",
+        "tests/cpu",
+        "tests/editor",
+        "tests/debugger",
+        "tests/academy",
+        "tests/persistence"
+      ]
+    },
+    "typecheck": {
+      "status": "passed",
+      "command": "npm run typecheck",
+      "scope": "final integrated source",
+      "evidence": [
+        "tsconfig.json",
+        "package.json"
+      ]
+    },
+    "lint": {
+      "status": "passed",
+      "command": "npm run lint",
+      "scope": "final integrated source",
+      "evidence": [
+        "package.json"
+      ]
+    },
+    "productionBuild": {
+      "status": "passed",
+      "command": "npm run build",
+      "assetBase": "/NandForge/",
+      "evidence": [
+        "vite.config.ts",
+        "package.json"
+      ],
+      "scope": "Final production build used by the complete three-engine browser suite and final screenshots.",
+      "testedAsset": "index-B85FVxlb.js"
+    },
+    "browsers": {
+      "status": "passed",
+      "scenarios": 20,
+      "executions": 60,
+      "failures": 0,
+      "engines": [
+        {
+          "name": "chromium",
+          "passed": 20,
+          "failed": 0,
+          "version": "156"
+        },
+        {
+          "name": "firefox",
+          "passed": 20,
+          "failed": 0,
+          "version": "157"
+        },
+        {
+          "name": "webkit",
+          "passed": 20,
+          "failed": 0,
+          "version": "27.2"
+        }
+      ],
+      "reproductionCommands": [
+        "PLAYWRIGHT_ALL_BROWSERS=1 npm run test:e2e"
+      ],
+      "server": "production preview under /NandForge/",
+      "evidence": [
+        "playwright.config.ts",
+        "tests/e2e/workflows.spec.ts",
+        "tests/e2e/cpu.spec.ts"
+      ],
+      "generatedReport": "playwright-report/index.html",
+      "note": "One completed final run: 20 scenarios in each engine, including sharing, English/Turkish return, exact XOR inspection and synchronous timer cancellation. This count does not add earlier runs.",
+      "recordedDurationSeconds": 73.60569,
+      "unexpected": 0,
+      "flaky": 0,
+      "skipped": 0,
+      "testedAsset": "index-B85FVxlb.js"
+    },
+    "benchmark": {
+      "status": "passed",
+      "command": "npm run bench",
+      "recordedAtUtc": "2026-10-17T19:16:30.820Z",
+      "environment": {
+        "runtime": "Node v24.19.0",
+        "os": "Linux x64",
+        "cpu": "AMD EPYC 9V74 80-Core Processor",
+        "exposedLogicalCpus": 9,
+        "workloadThreads": 1
+      },
+      "evidence": [
+        "scripts/benchmark.ts",
+        "docs/BENCHMARKS.md"
+      ],
+      "note": "Measured shared-engine throughput and bounded debugger retention; excludes browser rendering and physical timing."
+    },
+    "remoteCi": {
+      "status": "passed",
+      "runUrl": "https://github.com/Berkopan/NandForge/actions/runs/39064679103",
+      "evidence": [
+        ".github/workflows/ci.yml"
+      ],
+      "codeHead": "fcb591e061d429e183aa68011d356b795eea5e07",
+      "passedStages": [
+        "typecheck",
+        "lint",
+        "unit",
+        "production build",
+        "browser installation",
+        "three-engine browser execution",
+        "artifact publication"
+      ],
+      "currentStage": null,
+      "note": "The final-source workflow completed successfully. Remote durations are reported separately from local runs.",
+      "conclusion": "success",
+      "validationJob": {
+        "id": 117489719266,
+        "url": "https://github.com/Berkopan/NandForge/actions/runs/39064679103/job/117489719266",
+        "conclusion": "success",
+        "passedSteps": 14,
+        "totalSteps": 14
+      },
+      "unit": {
+        "passed": 218,
+        "reportedDurationSeconds": 2.82
+      },
+      "browsers": {
+        "passed": 60,
+        "scenariosPerEngine": 20,
+        "reportedDuration": "2.1 min"
+      }
+    },
+    "deployment": {
+      "status": "passed",
+      "pagesSource": "GitHub Actions",
+      "pagesSourceObserved": true,
+      "workflowRunUrl": "https://github.com/Berkopan/NandForge/actions/runs/39064679103",
+      "deploymentUrl": "https://berkopan.github.io/NandForge/",
+      "publicSmokeTestPassed": true,
+      "intendedUrl": "https://berkopan.github.io/NandForge/",
+      "evidence": [
+        ".github/workflows/ci.yml",
+        "docs/DEPLOYMENT.md",
+        "docs/screenshots/public-cpu-lab.jpg"
+      ],
+      "requiresOwnerSettingsChange": false,
+      "conclusion": "success",
+      "publicSmokeStatus": "passed",
+      "publicationJob": {
+        "id": 117490439008,
+        "url": "https://github.com/Berkopan/NandForge/actions/runs/39064679103/job/117490439008",
+        "conclusion": "success",
+        "passedSteps": 4,
+        "totalSteps": 4
+      },
+      "note": "Pages publication and the exact public URL were verified; deployed Home, Circuit Lab and CPU browser workflows produced the recorded real results."
+    },
+    "manualPreview": {
+      "status": "passed",
+      "context": "Manual cloud-preview interaction on an ordinary HTTP origin under /NandForge/.",
+      "observed": [
+        "Home loaded after the missing-randomUUID startup correction.",
+        "Actual CPU addition program halted with OUT=7 after six cycles."
+      ],
+      "evidence": [
+        "src/persistence/projects.ts",
+        "tests/persistence/projects.test.ts",
+        "src/debugger/CpuLab.tsx"
+      ],
+      "note": "This is preview verification, not public deployment evidence."
+    },
+    "visualReview": {
+      "status": "passed",
+      "scope": "Five final production screenshots regenerated and individually visually inspected after editor viewport, CPU diagram, timer and modal corrections.",
+      "testedAsset": "index-B85FVxlb.js",
+      "desktopViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "mobileViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 1,
+      "fullPage": true,
+      "screenshotFiles": [
+        {
+          "path": "docs/screenshots/home-desktop.png",
+          "width": 1440,
+          "height": 1330
+        },
+        {
+          "path": "docs/screenshots/circuit-lab-desktop.png",
+          "width": 1440,
+          "height": 1000
+        },
+        {
+          "path": "docs/screenshots/cpu-lab-desktop.png",
+          "width": 1440,
+          "height": 1350
+        },
+        {
+          "path": "docs/screenshots/academy-desktop.png",
+          "width": 1440,
+          "height": 1653
+        },
+        {
+          "path": "docs/screenshots/cpu-lab-mobile.png",
+          "width": 390,
+          "height": 2146
+        }
+      ],
+      "observed": [
+        "Half adder a=1,b=1 produces sum=0,carry=1 with all four truth-table rows.",
+        "Desktop CPU 3 + 4 produces OUT=7, cycle=6 and PC HOLD.",
+        "Mobile CPU input/output program produces OUT=42 at cycle=3.",
+        "Mobile Circuit Lab fits the 390×844 viewport and a switch changes the real output.",
+        "All five final captures were visually checked; no unhandled page errors."
+      ],
+      "evidence": [
+        "README.md",
+        "README.tr.md",
+        "docs/screenshots"
+      ],
+      "note": "Images show the local production preview; they do not establish public deployment."
+    },
+    "expandedUiCheck": {
+      "status": "passed",
+      "scope": [
+        "Share dialog retains its URL after Copy link, reports success or actionable manual-copy guidance, and restores a working project in a new browser context",
+        "Final Turkish CPU headings, ALU names and instruction explanations",
+        "Explicit switch back to English",
+        "Watchpoint stop and manual pause, snapshot restoration, reset, source edit and reassembly cancel scheduled ticks synchronously"
+      ],
+      "evidence": [
+        "src/App.tsx",
+        "src/debugger/CpuLab.tsx",
+        "src/editor/useCircuitRuntime.ts",
+        "tests/e2e/workflows.spec.ts",
+        "tests/e2e/cpu.spec.ts"
+      ],
+      "note": "Included in the completed 60-execution run, not a separate count."
+    },
+    "designReferenceReview": {
+      "status": "completed",
+      "timing": "Late review after implementation",
+      "evidence": [
+        "docs/DESIGN_REFERENCES.md"
+      ],
+      "sources": [
+        "https://www.nand2tetris.org/course",
+        "https://www.nand2tetris.org/project01",
+        "https://www.nand2tetris.org/software",
+        "https://circuitverse.org/",
+        "https://docs.circuitverse.org/",
+        "https://github.com/logisim-evolution/logisim-evolution#readme",
+        "https://store.steampowered.com/app/1444480/Turing_Complete/"
+      ],
+      "note": "Primary source ideas are separated from original NandForge choices; no competitor code or assets were imported during the review."
+    },
+    "publicSmoke": {
+      "status": "passed",
+      "dateUtc": "2026-10-17",
+      "publicUrl": "https://berkopan.github.io/NandForge/",
+      "visitedUrls": [
+        "https://berkopan.github.io/NandForge/",
+        "https://berkopan.github.io/NandForge/#/lab",
+        "https://berkopan.github.io/NandForge/#/cpu"
+      ],
+      "home": {
+        "initial": {
+          "a": 0,
+          "b": 1,
+          "out": 0
+        },
+        "subsequentInputsAndOutputs": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "circuitLab": {
+        "entryAction": "Open in Circuit Lab",
+        "nandGates": 2,
+        "wires": 5,
+        "logicalDepth": 2,
+        "diagnostics": 0,
+        "truthTable": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "cpu": {
+        "program": "Mandatory six-word 3 + 4 assembly program",
+        "status": "Halted",
+        "cycle": 6,
+        "a": 7,
+        "out": 7,
+        "pc": 5,
+        "pcDisplay": "0x05",
+        "pcWriteDisplay": "HOLD",
+        "waveformSamples": 13,
+        "probes": [
+          "CLK",
+          "A",
+          "PC",
+          "A.write",
+          "OUT"
+        ]
+      },
+      "consoleInspection": {
+        "warnings": 0,
+        "errors": 0,
+        "queryLimit": 20
+      },
+      "evidence": [
+        "docs/DEPLOYMENT.md",
+        "docs/ENGINEERING_AUDIT.md",
+        "docs/screenshots/public-cpu-lab.jpg"
+      ],
+      "scope": "Direct deployed-browser observation of these workflows; separate from the local and remote three-engine test suites.",
+      "routeReload": {
+        "url": "https://berkopan.github.io/NandForge/#/cpu",
+        "status": "passed",
+        "initialMachineStatus": "Ready",
+        "assemblySourceRetained": true,
+        "instructionCount": 6,
+        "rerunStatus": "Halted",
+        "programCounterAccessibleLabel": "PROGRAM COUNTER 0x05 HOLD",
+        "ioAccessibleValue": "0x00 → 0x07",
+        "consoleWarnings": 0,
+        "consoleErrors": 0,
+        "note": "Execution state resets on route reload; persisted source remains, as documented."
+      },
+      "screenshot": {
+        "path": "docs/screenshots/public-cpu-lab.jpg",
+        "format": "JPEG",
+        "width": 1713,
+        "height": 1384,
+        "bytes": 152716,
+        "sha256": "bbf62e9d12e63dd19a16a935639bd433da92f92e4215925e97d693265c87bc87"
+      }
+    }
+  },
+  "acceptance": [
+    {
+      "id": "A",
+      "title": "Basic gates",
+      "status": "verified",
+      "requirement": "Create two switch inputs and an AND gate; verify all four combinations.",
+      "implementation": [
+        "src/core/chips.ts",
+        "src/editor/CircuitEditor.tsx",
+        "src/editor/Inspector.tsx"
+      ],
+      "evidence": [
+        "tests/core/combinational.test.ts",
+        "tests/e2e/workflows.spec.ts"
+      ],
+      "observed": [
+        "Primitive and NAND-derived gate assertions pass.",
+        "Browser palette construction, typed wiring and the four-row truth table pass in Chromium, Firefox and WebKit."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "B",
+      "title": "NAND composition",
+      "status": "verified",
+      "requirement": "Implement XOR with NAND logic, verify the full table and inspect its real internal circuit.",
+      "implementation": [
+        "src/core/chips.ts",
+        "src/core/truthTable.ts",
+        "src/editor/CircuitEditor.tsx"
+      ],
+      "evidence": [
+        "tests/core/combinational.test.ts",
+        "tests/core/templates.test.ts",
+        "tests/editor/model.test.ts",
+        "tests/e2e/workflows.spec.ts"
+      ],
+      "observed": [
+        "Four-NAND XOR is executed exhaustively.",
+        "Saved NAND-XOR is instantiated twice and evaluated through the common simulator.",
+        "The inspector reads the actual instance path.",
+        "All three browser engines assert XOR outputs 0,1,1,0, then inspect exactly four NAND components and no XOR component inside the module."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "C",
+      "title": "Custom chip",
+      "status": "verified",
+      "requirement": "Save an executable circuit as a typed reusable chip and verify another circuit uses its internal logic.",
+      "implementation": [
+        "src/editor/model.ts",
+        "src/core/compiler.ts"
+      ],
+      "evidence": [
+        "tests/editor/model.test.ts",
+        "tests/core/hierarchy.test.ts",
+        "tests/e2e/workflows.spec.ts"
+      ],
+      "observed": [
+        "NAND-XOR extraction, independent instances, shared fan-out ports and distinct bus/carry ports pass.",
+        "Browser custom-chip save, reuse and live internal inspection pass in three engines."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "D",
+      "title": "Sequential logic",
+      "status": "verified",
+      "requirement": "Changing register data while paused must preserve stored output until the enabled clock edge.",
+      "implementation": [
+        "src/core/chips.ts",
+        "src/core/simulator.ts",
+        "src/editor/useCircuitRuntime.ts"
+      ],
+      "evidence": [
+        "tests/core/sequential.test.ts",
+        "tests/editor/model.test.ts",
+        "tests/e2e/workflows.spec.ts"
+      ],
+      "observed": [
+        "Pre-edge and atomic state tests pass.",
+        "The browser register holds 42 during paused and disabled edits, then updates to 99 at an enabled edge.",
+        "Nested inspection preserves per-instance sequential state."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "E",
+      "title": "Arithmetic",
+      "status": "verified",
+      "requirement": "Verify eight-bit adder and subtractor including carry, borrow and modular wraparound.",
+      "implementation": [
+        "src/core/chips.ts",
+        "src/cpu/alu.ts"
+      ],
+      "evidence": [
+        "tests/core/arithmetic.test.ts",
+        "tests/cpu/alu.test.ts"
+      ],
+      "observed": [
+        "131072 ADDER vectors and 131072 SUBTRACTOR vectors cover every byte pair and both carry/borrow inputs.",
+        "65536 comparator pairs pass.",
+        "CPU ADD and SUB each cover all 65536 byte pairs with ISA carry/no-borrow semantics."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "F",
+      "title": "CPU execution",
+      "status": "verified",
+      "requirement": "Run the 3 + 4 assembly program on the actual circuit CPU and observe OUT equal to 7.",
+      "implementation": [
+        "src/cpu/architecture.ts",
+        "src/cpu/machine.ts",
+        "src/debugger/CpuLab.tsx"
+      ],
+      "evidence": [
+        "tests/core/cpu-integrity.test.ts",
+        "tests/cpu/cpu.test.ts",
+        "tests/e2e/cpu.spec.ts"
+      ],
+      "observed": [
+        "Direct generic Simulator execution, without CpuMachine, yields A=7, OUT=7, PC=5, HALTED=1 and RAM[240]=3.",
+        "Changing the real ALU B-input wire to zero changes OUT to 4.",
+        "The browser 3 + 4 scenario passes in all three engines."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "G",
+      "title": "CPU branching",
+      "status": "verified",
+      "requirement": "Execute loops and verify PC changes and conditional branches use registered flags.",
+      "implementation": [
+        "src/cpu/architecture.ts",
+        "src/assembler/examples.ts"
+      ],
+      "evidence": [
+        "tests/cpu/cpu.test.ts",
+        "tests/cpu/reference.ts",
+        "tests/e2e/cpu.spec.ts"
+      ],
+      "observed": [
+        "12288 architectural transitions from 96 deterministic programs match the test-only reference.",
+        "All 256 opcode bytes and reserved fault behavior are tested.",
+        "The browser summation loop produces 55 in all three engines."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "H",
+      "title": "Debugging",
+      "status": "verified",
+      "requirement": "Stop before a breakpoint and step backward to restore the preceding complete machine state.",
+      "implementation": [
+        "src/debugger/session.ts",
+        "src/debugger/CpuLab.tsx"
+      ],
+      "evidence": [
+        "tests/debugger/session.test.ts",
+        "tests/e2e/cpu.spec.ts"
+      ],
+      "observed": [
+        "Breakpoints, one-shot resume, looping stops, RAM watchpoints, backward/forward snapshots and future truncation pass.",
+        "The browser stops at PC=4 before OUT and restores the pre-OUT machine after rewind.",
+        "The final three-engine browser run verifies watchpoint stops and synchronous cancellation before manual pause, snapshot restoration, reset, source editing and reassembly using a running 100 Hz loop."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "I",
+      "title": "Waveforms",
+      "status": "verified",
+      "requirement": "Record actual clock, register and control pin values while executing multiple instructions.",
+      "implementation": [
+        "src/editor/waveforms.ts",
+        "src/editor/WaveformPanel.tsx",
+        "src/debugger/session.ts"
+      ],
+      "evidence": [
+        "tests/editor/waveforms.test.ts",
+        "tests/debugger/session.test.ts",
+        "tests/e2e/cpu.spec.ts",
+        "scripts/benchmark.ts"
+      ],
+      "observed": [
+        "Real source-clock observations alternate rising=1 and falling=0.",
+        "Exported captures include actual OUT and other probe values.",
+        "Sustained execution retains at most 1024 waveform samples."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "J",
+      "title": "Academy",
+      "status": "verified",
+      "requirement": "Complete an interactive wiring challenge using simulated output-based verification.",
+      "implementation": [
+        "src/academy/lessons.ts",
+        "src/academy/verify.ts",
+        "src/views/Academy.tsx"
+      ],
+      "evidence": [
+        "tests/academy/verify.test.ts",
+        "tests/e2e/workflows.spec.ts"
+      ],
+      "observed": [
+        "Candidate circuits are executed with complete small-input tables, larger boundary/sample vectors and sequential hold/update sequences.",
+        "An unclocked register passthrough and an always-enabled faulty register are rejected.",
+        "Direct browser pin wiring earns persisted progress in all three engines.",
+        "Verification banners are associated with the exact checked solution so source edits and reset cannot display obsolete success.",
+        "The strengthened browser test restores the starter, confirms the success banner disappears and outputs become unavailable, then confirms earned progress still survives reload."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "K",
+      "title": "Persistence",
+      "status": "verified",
+      "requirement": "Save, reload, export and import a project while preserving topology and executable behavior.",
+      "implementation": [
+        "src/persistence/projects.ts",
+        "src/persistence/storage.ts",
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "tests/persistence/projects.test.ts",
+        "tests/persistence/storage.test.ts",
+        "tests/persistence/draft-storage.test.ts",
+        "tests/e2e/workflows.spec.ts"
+      ],
+      "observed": [
+        "Real IndexedDB and JSON browser round-trips preserve source, topology and simulated AND behavior.",
+        "A width-error editing draft survives reload beside a healthy project.",
+        "Malformed raw records are isolated and retained, with unreadable counts exposed.",
+        "Current-project duplication uses the latest project reference; deletion failures show a notice.",
+        "The integrated 218-test run includes a missing-crypto.randomUUID regression for ordinary HTTP previews; manual preview startup and CPU execution passed afterward.",
+        "A compressed share URL opened in a fresh browser context restores source, topology and executable behavior; Copy link reports success or manual-copy guidance while preserving the readable URL."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "L",
+      "title": "Localization",
+      "status": "verified",
+      "requirement": "Switch English and Turkish and observe localized major interfaces and lessons.",
+      "implementation": [
+        "src/i18n/index.ts",
+        "src/editor/i18n.ts",
+        "src/academy/lessons.ts",
+        "src/views/Academy.tsx",
+        "src/debugger/CpuLab.tsx",
+        "src/i18n/cpu.ts"
+      ],
+      "evidence": [
+        "tests/academy/verify.test.ts",
+        "tests/e2e/workflows.spec.ts"
+      ],
+      "observed": [
+        "Localized Academy feedback assertions pass.",
+        "Turkish shell/editor controls, document language, documentation navigation and language persistence pass in three browser engines.",
+        "The strengthened browser path observes Turkish CPU source/load/run controls, memory labels and ALU explanation, and runs the actual addition program to OUT=7.",
+        "The Turkish lesson foundation and hint are checked; direct pin wiring earns localized successful behavioral verification.",
+        "The final three-engine workflow explicitly switches back to English and verifies the restored English interface."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "M",
+      "title": "Deployment",
+      "status": "verified",
+      "requirement": "Operate at the user-corrected /NandForge/ base and verify the GitHub Pages workflow and public site.",
+      "implementation": [
+        "vite.config.ts",
+        ".github/workflows/ci.yml",
+        "playwright.config.ts"
+      ],
+      "evidence": [
+        "tests/e2e/workflows.spec.ts",
+        "tests/e2e/cpu.spec.ts",
+        "docs/DEPLOYMENT.md",
+        "docs/screenshots/public-cpu-lab.jpg"
+      ],
+      "observed": [
+        "The production preview operates under /NandForge/ in all three tested browser engines.",
+        "Pages repository settings were read and already use GitHub Actions.",
+        "The workflow gates publication on typecheck, lint, tests, build and three-engine browser execution.",
+        "Pages source is already GitHub Actions; no owner setting change is required.",
+        "Final-source workflow 39064679103 completed successfully: validation job 117489719266 passed 14/14 steps and Pages publication job 117490439008 passed 4/4 steps.",
+        "The exact public URL https://berkopan.github.io/NandForge/ loaded and navigated to #/lab and #/cpu.",
+        "Public Home and the real two-NAND Circuit Lab graph produced the complete correct AND truth table, with zero circuit diagnostics.",
+        "The public CPU executed the mandatory six-word program to A=7, OUT=7, PC=5 HOLD and Halted at cycle 6; the waveform panel held 13 actual samples.",
+        "A public browser console query returned no warnings or errors (limit 20).",
+        "A hard reload on public #/cpu preserved the six-instruction source, reopened Ready, and executed successfully again to Halted with PC HOLD and output 0x07; console inspection remained empty."
+      ],
+      "remaining": []
+    },
+    {
+      "id": "N",
+      "title": "Verification",
+      "status": "verified",
+      "requirement": "Run and accurately report the actual tests, type checker, linter and production build.",
+      "implementation": [
+        "package.json",
+        "tsconfig.json",
+        "playwright.config.ts",
+        ".github/workflows/ci.yml"
+      ],
+      "evidence": [
+        "tests/core/cpu-integrity.test.ts",
+        "tests/cpu/cpu.test.ts",
+        "tests/e2e/workflows.spec.ts",
+        "tests/e2e/cpu.spec.ts",
+        "docs/ENGINEERING_AUDIT.md",
+        "docs/BENCHMARKS.md"
+      ],
+      "observed": [
+        "Integrated npm test passed 218 tests in 17 files, with reported duration 1.72 seconds; this includes the HTTP identifier regression.",
+        "Global npm run typecheck and npm run lint passed.",
+        "The final production build and three-engine browser suite passed: 60 executions, 20 per engine, 73.60569 seconds, zero unexpected, flaky or skipped tests.",
+        "The benchmark emitted measured results after deterministic correctness checks."
+      ],
+      "remaining": []
+    }
+  ],
+  "implementationBoundaries": [
+    "Two-valued unsigned 1–16-bit synchronous simulation with explicit source clocks.",
+    "Composite combinational logic and CPU control execute actual NAND-derived graphs.",
+    "DFF, RAM, ROM, clocks, external inputs and wiring are declared idealized boundaries.",
+    "Compiled full-pass evaluation with dirty-state skipping; no worker, per-net event queue or physical timing claim.",
+    "Project topology, chip definitions and assembly source persist; CPU/register/probe/breakpoint/history session state is transient across route unmount and reload.",
+    "Internal storage admits safe typed semantic-error drafts while keeping structural, schema, prototype, reference, interface, recursion and resource validation."
+  ],
+  "pendingClosure": []
+}

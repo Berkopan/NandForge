@@ -1,6 +1,22 @@
 # Build verification and GitHub Pages deployment
 
-The repository is `Berkopan/NandForge`. Its case-sensitive project path is `/NandForge/`, and the intended public URL is <https://berkopan.github.io/NandForge/>. The deployment workflow uploads the production `dist` directory after all validation gates succeed. A checked-in workflow by itself does not establish that the site is live; check the actual deployment run and public URL.
+The repository is `Berkopan/NandForge`. Its case-sensitive project path is `/NandForge/`, and the verified public URL is <https://berkopan.github.io/NandForge/>. The deployment workflow uploads the production `dist` directory after all validation gates succeed. A checked-in workflow by itself does not establish that the site is live; check the actual deployment run and public URL.
+
+## Observed publication
+
+On **17 October 2026**, [Actions run 39064679103](https://github.com/Berkopan/NandForge/actions/runs/39064679103) for final source `fcb591e061d429e183aa68011d356b795eea5e07` completed **successfully**. The [validation job](https://github.com/Berkopan/NandForge/actions/runs/39064679103/job/117489719266) passed **14/14 steps**, including the production-browser gate. The [Pages publication job](https://github.com/Berkopan/NandForge/actions/runs/39064679103/job/117490439008) passed **4/4 steps**. Repository Pages settings already use **GitHub Actions**, so no owner configuration change is required.
+
+The remote validation recorded **218 unit tests passed in 2.82 s** and **60 browser executions passed in 2.1 min**. These remote durations are separate from the local results below.
+
+The deployed site at **[https://berkopan.github.io/NandForge/](https://berkopan.github.io/NandForge/)** was then opened and exercised in a browser:
+
+| Public page | Observed behavior |
+| --- | --- |
+| Home | Initial A=0, B=1 produced OUT=0; toggling to 11 produced 1, 10 produced 0, and 00 produced 0. |
+| `#/lab` | Open in Circuit Lab created the actual two-NAND AND circuit: 2 NAND gates, 5 wires, depth 2 and zero diagnostics. Its generated truth table was 00→0, 01→0, 10→0, 11→1. |
+| `#/cpu` | The mandatory six-word 3 + 4 program ran to Halted at cycle 6 with A=7, OUT=7, PC=0x05 and PC HOLD. The waveform panel contained 13 actual samples for CLK, A, PC, A.write and OUT. |
+
+A hard reload directly on public `#/cpu` reopened the CPU route in Ready state, with the exact six-instruction source retained. Running again halted successfully; accessible controls showed `PROGRAM COUNTER 0x05 HOLD` and I/O `0x00 → 0x07`. The runtime reset matches the documented transient-session boundary. The browser console inspection returned no warnings or errors (query limit 20), and the post-reload console inspection was also empty. This was a deployed browser smoke check of those observed workflows; the three-engine suite above remains separately identified. [Public CPU screenshot](screenshots/public-cpu-lab.jpg).
 
 ## Local production verification
 
@@ -31,16 +47,20 @@ The application uses hash navigation, so a route such as `/NandForge/#/cpu` stil
 
 ### Browser verification recorded during implementation
 
-On 17 October 2026, the production build served under `/NandForge/` passed all 18 browser scenarios in each engine:
+On 17 October 2026, the final production build served under `/NandForge/` passed all 20 browser scenarios in each engine:
 
 | Browser engine | Scenarios passed |
 | --- | ---: |
-| Chromium 156 | 18 / 18 |
-| Firefox 157 | 18 / 18 |
-| WebKit 27.2 | 18 / 18 |
-| **Total** | **54 / 54** |
+| Chromium 156 | 20 / 20 |
+| Firefox 157 | 20 / 20 |
+| WebKit 27.2 | 20 / 20 |
+| **Total** | **60 / 60** |
 
-The scenarios cover actual palette placement and canvas/Inspector wiring, LED signals, exhaustive truth-table generation, undo/redo, custom-chip reuse and live internal signals, clocked register enable behavior, JSON export/import, project management, IndexedDB reload, recoverable drafts with a width error, unsafe import rejection, Academy verification and retained completion, English/Turkish switching, CPU assembly and execution, source breakpoints, RAM watchpoints, backward stepping, exported real clock-edge traces, and narrow-screen CPU use. The tests also reject unhandled page errors. This is local production-browser evidence; the repository's Actions run and Pages deployment remain separate checks.
+The scenarios cover actual palette placement and canvas/Inspector wiring, LED signals, all four AND and XOR truth-table rows, inspection of XOR's four real NAND gates, undo/redo, custom-chip reuse and live internal signals, clocked register enable behavior, JSON export/import, compressed share links restored in a fresh browser context, project management, IndexedDB reload, recoverable drafts with a width error, unsafe import rejection, Academy verification and retained completion, English/Turkish switching, CPU assembly and execution, source breakpoints, RAM watchpoints, backward stepping, exported real clock-edge traces, and narrow-screen CPU use. Turkish checks include visible CPU register labels, ALU names, instruction-specific explanations, lesson content and behavioral results, followed by switching back to English. Resetting a completed lesson clears its current verification result while preserving earned progress.
+
+The CPU scheduling regression runs a real loop and checks that pause, snapshot restoration, reset, source editing and reassembly synchronously cancel pending clock ticks. The gate also checks the accessible CPU subsystem buttons, PC hold behavior at HLT, and desktop editor height before and after opening an internal circuit. Every scenario rejects unhandled page errors. These counts describe the local production-browser run. The successful remote validation and Pages publication are recorded separately above.
+
+Five visually reviewed production screenshots are saved in `docs/screenshots`. Desktop captures use a 1440 × 1000 viewport; the mobile CPU capture uses 390 × 844. The Circuit Lab shows a live half-adder and its complete truth table, and the CPU captures show actual latched outputs of 7 and 42. A separate mobile Circuit Lab check confirms that a switch drives the output and the editor fits its 844-pixel viewport.
 
 ## CI and deployment gates
 
