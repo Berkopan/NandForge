@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { BookOpen, Check, CheckCircle2, ChevronDown, CircuitBoard, Cpu, Download, FolderOpen, Globe, Home as HomeIcon, Menu, Plus, Save, Share2, Upload, X } from 'lucide-react';
+import { BookOpen, Check, CheckCircle2, ChevronDown, CircuitBoard, Copy, Cpu, Download, FolderOpen, Globe, Home as HomeIcon, Menu, Plus, Save, Share2, Upload, X } from 'lucide-react';
 import { createTemplate, type Circuit, type ChipDefinition } from './core';
 import { CircuitEditor } from './editor/CircuitEditor';
 import { CpuLab } from './debugger/CpuLab';
@@ -44,6 +44,8 @@ export default function App() {
   const [toast, setToast] = useState<{ message: string; id: number } | null>(null);
   const [menu, setMenu] = useState(false);
   const [modal, setModal] = useState<{ type: 'new'|'rename'|'delete'|'reset'; target?: Project } | null>(null);
+  const [shareLink, setShareLink] = useState<string | null>(null);
+  const [shareStatus, setShareStatus] = useState<string | null>(null);
   const [name, setName] = useState('');
   const upload = useRef<HTMLInputElement>(null);
   const current = useRef(project); current.current = project;
@@ -158,6 +160,21 @@ export default function App() {
     try { const imported = duplicateProject(parseProject(await file.text())); imported.name = imported.name.replace(/ \(copy\)$/, ''); await switchProject(imported, 'lab'); notify(t(language,'importedProject')); }
     catch (error) { notify(`${t(language,'generalError')}: ${error instanceof Error ? error.message : String(error)}`); }
   };
+  const copyShareLink = async (url: string) => {
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(url);
+      setShareStatus(t(language,'shareCopied'));
+    } catch { setShareStatus(tr ? 'Bağlantı alanını seçip Ctrl/Cmd+C ile kopyalayabilirsin.' : 'Select the link field and press Ctrl/Cmd+C to copy it.'); }
+  };
+  const shareProject = async () => {
+    if (!current.current) return;
+    try {
+      const payload = await encodeShare(current.current);
+      setShareStatus(null);
+      setShareLink(`${location.origin}${location.pathname}#share=${payload}`);
+    } catch (error) { notify(error instanceof Error ? error.message : String(error)); }
+  };
   const createWorkspaceProject = (name: string, circuit?: Circuit) => ({
     ...createProject(name, circuit), chips: structuredClone(current.current?.chips ?? []),
   });
@@ -169,7 +186,7 @@ export default function App() {
     <a className="skip-link" href="#app-content" onClick={(event) => { event.preventDefault(); document.getElementById('app-content')?.focus(); }}>{tr ? 'İçeriğe geç' : 'Skip to content'}</a>
     <header className="app-header"><a className="brand-link" href="#/" aria-label="NandForge home"><Logo /></a><nav className={menu ? 'main-nav open' : 'main-nav'} aria-label={tr ? 'Ana gezinme' : 'Main navigation'}>{nav.map((item) => <a key={item.view} href={item.view === 'home' ? '#/' : `#/${item.view}`} className={route.view === item.view ? 'active' : ''} aria-current={route.view === item.view ? 'page' : undefined}><item.icon size={15} /><span>{t(language,item.label)}</span></a>)}</nav><div className="header-actions"><button className="language-switch" aria-label={t(language,'selectLanguage')} onClick={() => setLanguage(language === 'en' ? 'tr' : 'en')}><Globe size={14} /><span>{language.toUpperCase()}</span><ChevronDown size={11} /></button><a className="github-link" href="https://github.com/Berkopan/NandForge" target="_blank" rel="noreferrer" aria-label="GitHub repository"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.87c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.64-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03a9.58 9.58 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.58 4.93.36.31.68.92.68 1.85v2.76c0 .26.18.58.69.48A10 10 0 0 0 12 2Z"/></svg></a><button className="mobile-menu icon-button" aria-label={tr ? 'Menü' : 'Menu'} aria-expanded={menu} onClick={() => setMenu(!menu)}><Menu size={20} /></button></div></header>
     <input hidden type="file" accept=".json,.nandforge.json,application/json" ref={upload} onChange={(event) => { const file = event.target.files?.[0]; if (file) void importFile(file); event.target.value = ''; }} />
-    {project && (route.view === 'lab' || route.view === 'cpu') && <div className="project-bar"><div className="project-breadcrumb"><FolderOpen size={15} /><button onClick={() => { setModal({type:'rename',target:project}); setName(project.name); }}>{project.name}<ChevronDown size={12} /></button><span>/</span><strong>{t(language,route.view === 'lab' ? 'lab' : 'cpu')}</strong></div><span className={`save-status ${dirty ? 'dirty' : ''}`} title={saveLabel}>{saveStatus === 'saving' ? <span className="spinner tiny" /> : dirty ? <i /> : <Check size={12} />}{saveLabel}</span><div className="project-actions"><button className="icon-button" title={t(language,'newProject')} aria-label={t(language,'newProject')} onClick={() => {setName('');setModal({type:'new'});}}><Plus size={15} /></button><button className="icon-button" title={t(language,'import')} aria-label={t(language,'import')} onClick={() => upload.current?.click()}><Upload size={15} /></button><button className="icon-button" title={t(language,'export')} aria-label={t(language,'export')} onClick={() => exportProject(project)}><Download size={15} /></button><button className="icon-button" title={t(language,'share')} aria-label={t(language,'share')} onClick={async () => { try { const payload = await encodeShare(project); await navigator.clipboard.writeText(`${location.origin}${location.pathname}#share=${payload}`); notify(t(language,'shareCopied')); } catch(error) { notify(error instanceof Error ? error.message : String(error)); } }}><Share2 size={15} /></button><button onClick={() => {void persist().catch(() => undefined);}}><Save size={14} />{t(language,'save')}</button></div></div>}
+    {project && (route.view === 'lab' || route.view === 'cpu') && <div className="project-bar"><div className="project-breadcrumb"><FolderOpen size={15} /><button onClick={() => { setModal({type:'rename',target:project}); setName(project.name); }}>{project.name}<ChevronDown size={12} /></button><span>/</span><strong>{t(language,route.view === 'lab' ? 'lab' : 'cpu')}</strong></div><span className={`save-status ${dirty ? 'dirty' : ''}`} title={saveLabel}>{saveStatus === 'saving' ? <span className="spinner tiny" /> : dirty ? <i /> : <Check size={12} />}{saveLabel}</span><div className="project-actions"><button className="icon-button" title={t(language,'newProject')} aria-label={t(language,'newProject')} onClick={() => {setName('');setModal({type:'new'});}}><Plus size={15} /></button><button className="icon-button" title={t(language,'import')} aria-label={t(language,'import')} onClick={() => upload.current?.click()}><Upload size={15} /></button><button className="icon-button" title={t(language,'export')} aria-label={t(language,'export')} onClick={() => exportProject(project)}><Download size={15} /></button><button className="icon-button" title={t(language,'share')} aria-label={t(language,'share')} onClick={() => { void shareProject(); }}><Share2 size={15} /></button><button onClick={() => {void persist().catch(() => undefined);}}><Save size={14} />{t(language,'save')}</button></div></div>}
     <div id="app-content" className={`app-content view-${route.view}`} tabIndex={-1}>
       {loading || !project ? <div className="loading-workspace"><Logo /><span className="spinner" /><p>{t(language,'loading')}</p></div> : <ErrorBoundary key={`${route.view}-${route.lessonId ?? ''}-${project.id}`}>
         {route.view === 'home' && <Home language={language} onOpenCircuit={openCircuit} />}
@@ -192,6 +209,12 @@ export default function App() {
         setModal(null);
         } catch (error) { notify(`${t(language,'storageError')} ${error instanceof Error ? error.message : ''}`); }
       }}>{t(language,modal.type === 'delete' ? 'delete' : 'restore')}</button></div></>}
+    </Modal>}
+    {shareLink && <Modal title={tr ? 'Projeyi paylaş' : 'Share project'} onClose={() => setShareLink(null)} closeLabel={t(language,'close')}>
+      <p>{tr ? 'Bağlantı; devrenin, özel çiplerinin ve assembly kodunun sıkıştırılmış bir kopyasını içerir. Başka bir tarayıcıda açarak projeyi içe aktarabilirsin.' : 'The link contains a compressed copy of your circuit, custom chips and assembly source. Open it in another browser to import the project.'}</p>
+      <label>{tr ? 'Paylaşım bağlantısı' : 'Share link'}<input readOnly autoFocus value={shareLink} onFocus={(event) => event.currentTarget.select()} /></label>
+      {shareStatus && <p role="status">{shareStatus}</p>}
+      <div className="modal-actions"><button onClick={() => { if (current.current) exportProject(current.current); }}><Download size={14} />{t(language,'export')}</button><button className="primary" onClick={() => { void copyShareLink(shareLink); }}><Copy size={14} />{tr ? 'Bağlantıyı kopyala' : 'Copy link'}</button></div>
     </Modal>}
   </div>;
 }
