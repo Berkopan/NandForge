@@ -103,6 +103,8 @@ test('editing assembly disables execution until a successful load and shows posi
 
 test('cancels scheduled clock ticks before pausing, restoring, resetting or editing a running program', async ({ page }) => {
   await load(page, 'IN\nOUT\nJMP 0');
+  // Keep snapshot zero within the 256-entry history while retaining the same 30 Hz scheduling cadence.
+  await page.getByRole('combobox', { name: 'Speed', exact: true }).selectOption('100');
   await page.getByRole('spinbutton', { name: /^External input/ }).fill('42');
   const cycle = page.getByTestId('cpu-cycle');
   const waitForExecution = async () => { await expect.poll(async () => Number((await cycle.innerText()).replaceAll(',', ''))).toBeGreaterThan(0); };

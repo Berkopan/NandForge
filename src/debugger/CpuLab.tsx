@@ -32,6 +32,7 @@ export function CpuLab({ source, onSourceChange, language, onNotify, onVerified 
   const [running, setRunning] = useState(false);
   const runTimer = useRef<number | null>(null);
   const runGeneration = useRef(0);
+  const runRequested = useRef(false);
   const [speed, setSpeed] = useState(5);
   const [selectedSubsystem, setSelectedSubsystem] = useState('alu');
   const [inspecting, setInspecting] = useState(false);
@@ -52,6 +53,7 @@ export function CpuLab({ source, onSourceChange, language, onNotify, onVerified 
   }))), [session]);
 
   const stopRunning = useCallback(() => {
+    runRequested.current = false;
     runGeneration.current += 1;
     if (runTimer.current !== null) {
       window.clearInterval(runTimer.current);
@@ -70,16 +72,16 @@ export function CpuLab({ source, onSourceChange, language, onNotify, onVerified 
   const toggleRun = useCallback(() => {
     if (running) { stopRunning(); return; }
     if (!loaded || state.halted) return;
-    session.beginRun(); setRunning(true);
+    session.beginRun(); runRequested.current = true; setRunning(true);
   }, [running, loaded, state.halted, session, stopRunning]);
 
   useEffect(() => {
-    if (!running) return;
+    if (!running || !runRequested.current) return;
     const generation = ++runGeneration.current;
     const frequency = Math.min(speed, 30);
     let accumulated = 0;
     const timer = window.setInterval(() => {
-      if (generation !== runGeneration.current) return;
+      if (generation !== runGeneration.current || !runRequested.current) return;
       accumulated += speed / frequency;
       const count = Math.floor(accumulated);
       accumulated -= count;
