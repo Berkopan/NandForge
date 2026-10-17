@@ -12,9 +12,6 @@ const labels = {
   halt: { en: 'HALT', tr: 'DURDU' },
   branch: { en: 'BRANCH', tr: 'DALLAN' },
   aluSelection: { en: 'ALU', tr: 'ALU seçimi' },
-  binary: { en: 'BINARY', tr: 'İKİLİ' },
-  hexadecimal: { en: 'Hex', tr: 'Onaltılık' },
-  decimal: { en: 'Decimal', tr: 'Onluk' },
 } as const;
 
 export function cpuText(language: Language, key: keyof typeof labels): string {

@@ -31,12 +31,24 @@ export function useCircuitRuntime(circuit: Circuit, chips: ChipDefinition[], pro
     }
   }, [key, externalSimulator, signalPrefix]);
   const [revision, setRevision] = useState(0);
-  const [running, setRunning] = useState(false);
+  const [running, setRunningState] = useState(false);
   const [speed, setSpeed] = useState(2);
   const [recording, setRecording] = useState(true);
   const [samples, setSamples] = useState<WaveformSample[]>([]);
   const sampleSequence = useRef(0);
   const runSteps = useRef(0);
+  const cancelClock = useRef<(() => void) | null>(null);
+  const requestedRunning = useRef(false);
+  const setRunning = useCallback((next: boolean) => {
+    // Stop queued ticks before callers reset state, inspect, or pause. Waiting for
+    // React's passive effect cleanup would allow an extra clock edge in between.
+    requestedRunning.current = next;
+    if (!next) {
+      cancelClock.current?.();
+      cancelClock.current = null;
+    }
+    setRunningState(next);
+  }, []);
 
   const makeSample = useCallback((simulator: Simulator, phase: SamplePhase, activeProbes = probes): WaveformSample => {
     const values: Record<string, number> = {};
@@ -58,7 +70,7 @@ export function useCircuitRuntime(circuit: Circuit, chips: ChipDefinition[], pro
     setSamples([]);
     sampleSequence.current = 0;
     runSteps.current = 0;
-  }, [execution]);
+  }, [execution, setRunning]);
 
   // Externally owned machines may change through their debugger. Observe their real
   // settled state; the owning debugger retains the per-edge high/low capture.
@@ -82,8 +94,10 @@ export function useCircuitRuntime(circuit: Circuit, chips: ChipDefinition[], pro
   }, [execution, recording, probes, makeSample, externalSimulator]);
 
   useEffect(() => {
-    if (!running || !execution.simulator || externalSimulator) return;
+    if (!running || !requestedRunning.current || !execution.simulator || externalSimulator) return;
+    let stopped = false;
     const interval = window.setInterval(() => {
+      if (stopped || !requestedRunning.current) return;
       if (runSteps.current >= 10000) {
         setRunning(false);
         runSteps.current = 0;
@@ -93,8 +107,13 @@ export function useCircuitRuntime(circuit: Circuit, chips: ChipDefinition[], pro
       step();
       runSteps.current += 1;
     }, 1000 / speed);
-    return () => window.clearInterval(interval);
-  }, [running, execution, speed, step, onRunLimit, externalSimulator]);
+    const cancel = () => { stopped = true; window.clearInterval(interval); };
+    cancelClock.current = cancel;
+    return () => {
+      cancel();
+      if (cancelClock.current === cancel) cancelClock.current = null;
+    };
+  }, [running, execution, speed, step, onRunLimit, externalSimulator, setRunning]);
 
   const setInput = useCallback((nodeId: string, value: number) => {
     if (!execution.simulator || externalSimulator) return;
@@ -111,7 +130,7 @@ export function useCircuitRuntime(circuit: Circuit, chips: ChipDefinition[], pro
     runSteps.current = 0;
     setSamples([]);
     setRevision(current => current + 1);
-  }, [execution, externalSimulator]);
+  }, [execution, externalSimulator, setRunning]);
 
   const read = useCallback((nodeId: string, pin: string): number | undefined => {
     return readScopedSignal(execution.simulator, signalPrefix, nodeId, pin);
