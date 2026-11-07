@@ -17,7 +17,7 @@
     "bench": "vite-node scripts/benchmark.ts"
   },
   "dependencies": {
-    "@xyflow/react": "^12.10.0",
+    "@xyflow/react": "^12.12.1",
     "lucide-react": "^0.577.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
